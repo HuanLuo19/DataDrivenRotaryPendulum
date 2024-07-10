@@ -3,7 +3,7 @@ close all
 clc
 
 %% Define systen
-identified_para = matfile("identified_parameters.mat");
+identified_para = matfile("data/identified_parameters.mat");
 a1 = identified_para.a1;
 a2 = identified_para.a2;
 b1 = identified_para.b1;
