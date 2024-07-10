@@ -5,10 +5,8 @@ clc
 %% Initialize
 STEP_SIZE = 5e-3;
 SIMULATION_TIME = inf;
-% load("K0_2407081823.mat")
-load("K0_2407091714_transferFcnDerivative.mat")
-motor_speed = motor_speed_transfcn;
-pendulum_speed = pendulum_speed_transfcn;
+% load("data_K0_2407081823.mat")
+load("data_K0_240710_transFcnDeriv.mat")
 
 %% system
 A = [0    1.0000         0         0;
@@ -49,12 +47,12 @@ legend("motor speed","pendulum speed",...
     'Interpreter','latex',Location="northwest")
 subplot(3,1,3)
 hold on
-plot(switch_state1(1,:),'.-',MarkerSize=10)
+plot(switch_state(1,:),'.-',MarkerSize=10)
 legend("switch state",...
     'Interpreter','latex',Location="northwest")
 
 %% Get data-driven data
-time_on_idx = find(switch_state1.Data(1,:),1); % get switch on time
+time_on_idx = find(switch_state.Data(1,:),1); % get switch on time
 l = 10; % segment(equation) numbers
 T_int = 0.05;   % integral time
 N_data_points = l * T_int / STEP_SIZE;
@@ -64,7 +62,7 @@ dd_motor_speed = motor_speed.Data(time_on_idx:time_on_idx + N_data_points);
 dd_pendulum_angle = pendulum_angle.Data(time_on_idx:time_on_idx + N_data_points);
 dd_pendulum_speed = pendulum_speed.Data(time_on_idx:time_on_idx + N_data_points);
 dd_time = time.Data(time_on_idx:time_on_idx + N_data_points);
-dd_switch_state = switch_state1.Data(1,time_on_idx:time_on_idx + N_data_points);
+dd_switch_state = switch_state.Data(1,time_on_idx:time_on_idx + N_data_points);
 
 figure
 sgtitle("Data-driven data",'Interpreter','latex')
