@@ -33,32 +33,21 @@ q3 = 1000;
 Q = diag([q1 0 q3 0]);
 R = 1;
 
-% A = [-0.0665 11.5 0 0;
-%     0 -2.5 2.5 0;
-%     -9.5 0 -13.736 -13.736
-%     0.6 0 0 0];             %system matrix
-% B = [0; 0; 13.736; 0];      %input matrix
-% x0 = [0; 0.1; 0; 0];        %IC
-% nx = size(A,2); %state dimension
-% nu = size(B,2); %input dimension
-% Q = eye(nx); % cost function weighted matrix
-% R = eye(nu); % cost function weighted matrix
-
 x0 = [1 0 0 0]';
-sys1 = linearSys(A,B,x0,Q,R);
+sys_0 = linearSys(A,B,x0,Q,R);
 
 %% TEST
 % test1
 % T_test = 5;
-% sys1.generateTestResponseZeroInput(T_test);
-% sys1.generateTestResponseOptimalInput(T_test);
-
+% sys_0.generateTestResponseZeroInput(T_test);
+% sys_0.generateTestResponseOptimalInput(T_test);
+% 
 % test2
 % dtau = 1e-3;
 % T = 0.5;
 % K_a = -[-1 -0.1 -0.1 0.1];
-% [x_a,u_a,tspan_a] = sys1.ResponseFromGain(K_a,dtau,T);
-% [x_opt,u_opt,tspan_opt] = sys1.ResponseFromGain(K_opt,dtau,T);
+% [x_a,u_a,tspan_a] = sys_0.ResponseFromGain(K_a,dtau,T);
+% [x_opt,u_opt,tspan_opt] = sys_0.ResponseFromGain(K_opt,dtau,T);
 
 %% Data loss processing
 % T_loss = 0.05;
