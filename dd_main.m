@@ -5,8 +5,8 @@ clc
 %% Initialize
 STEP_SIZE = 5e-3;
 SIMULATION_TIME = inf;
-% load("data_K0_2407081823.mat")
-load("data_K0_240710_transFcnDeriv.mat")
+% load("data/data_K0_2407081823.mat")
+load("data/data_K0_2407101229_transFcnDeriv.mat")
 
 %% system
 A = [0    1.0000         0         0;
