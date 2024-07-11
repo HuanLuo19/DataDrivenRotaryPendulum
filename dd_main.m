@@ -6,8 +6,8 @@ clear variables
 close all
 clc
 % --- select data
-% load("data/data_K0_2407081823.mat")
-load("data/data_K0_2407101229_transFcnDeriv.mat")
+load("data/data_K0_2407081823.mat")
+% load("data/data_K0_2407101229_transFcnDeriv.mat")
 
 %% Show Raw Data
 figure("Name","Raw Data")
