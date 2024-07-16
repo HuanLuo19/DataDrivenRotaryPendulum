@@ -6,8 +6,7 @@ clear variables
 close all
 clc
 % --- select data
-load("data/data_K0_2407081823.mat")
-% load("data/data_K0_2407101229_transFcnDeriv.mat")
+load("data/data_K0_2407161545.mat")
 
 %% Show Raw Data
 figure("Name","Raw Data")
@@ -33,19 +32,21 @@ legend("switch state",...
 
 %% Get data-driven state data
 time_on_idx = find(switch_state.Data(1,:),1); % get switch on time
-l = 10; % segment(equation) numbers
-T_int = 0.05;   % integral time
-N_data_points = l * T_int / STEP_SIZE;
+% l = 10; % segment(equation) numbers
+% T_int = 0.05;   % integral time
+% N_data_points = l * T_int / STEP_SIZE;
+T_data = 1.2;
+N_data_points = T_data / STEP_SIZE;
 
 dd_time = time.Data(time_on_idx:time_on_idx + N_data_points);
 dd_switch_state = switch_state.Data(1,time_on_idx:time_on_idx + N_data_points);
 % for new data
-% dd_x = state4dim.Data(time_on_idx:time_on_idx + N_data_points,:)';
+dd_x = state4dim.Data(time_on_idx:time_on_idx + N_data_points,:)';
 % for old data (before 240711)
-dd_x(1,:) = motor_angle.Data(time_on_idx:time_on_idx + N_data_points);
-dd_x(2,:) = motor_speed.Data(time_on_idx:time_on_idx + N_data_points);
-dd_x(3,:) = pendulum_angle.Data(time_on_idx:time_on_idx + N_data_points);
-dd_x(4,:) = pendulum_speed.Data(time_on_idx:time_on_idx + N_data_points);
+% dd_x(1,:) = motor_angle.Data(time_on_idx:time_on_idx + N_data_points);
+% dd_x(2,:) = motor_speed.Data(time_on_idx:time_on_idx + N_data_points);
+% dd_x(3,:) = pendulum_angle.Data(time_on_idx:time_on_idx + N_data_points);
+% dd_x(4,:) = pendulum_speed.Data(time_on_idx:time_on_idx + N_data_points);
 
 % show data to use
 figure("Name","Used Data")
@@ -97,20 +98,20 @@ B = [0   39.2743         0   24.6327]';
 Q = diag([100 0 1000 0]);
 R = 1;
 
-K = [10 1 1 -0.1];
 if ~all(eig(A - B * K)<0)
     fprintf("K is NOT a stabilizing gain! \n")
     return
 end 
-Pi_lyap = lyap((A - B * K)', Q + K' * R * K);
 
 x0 = dd_x(:,1);
 sys = linearSys(A,B,x0,Q,R);
 if ~all(eig(A - B * K)<0)
     fprintf("Ki is NOT a stabilizing gain! \n")
     % return
-end    
-dd = ddLyap(dd_x, STEP_SIZE, l , K, sys); % solve data driven Lyapunov equation
+end
+
+l = 10;
+dd = ddLyap(dd_x, l, STEP_SIZE , K, sys); % solve data driven Lyapunov equation
 Pi = dd.Pi;
 Kip1 = dd.Kip1;
 

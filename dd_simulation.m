@@ -75,7 +75,7 @@ if ~all(eig(A - B * K0)<0)
     fprintf("K0 is NOT a stabilizing gain! \n")
     return
 end
-itr = 7;
+itr = 1;
 
 Flag_Sim_No_Loss = 1;
 Flag_Sim_Loss = 0;
@@ -116,7 +116,7 @@ Flag_Sim_Loss = 0;
 %     loss.generateLinearInterpolatedData()
 %     x_intrp = loss.x_intrp;
 %     % ----------- 
-%     dd_loss = ddLyap(x_intrp, dtau, l , K0_loss, sys_loss); % solve data driven Lyapunov equation
+%     dd_loss = ddLyap(x_intrp, l, dtau , K0_loss, sys_loss); % solve data driven Lyapunov equation
 %     Pi_loss = dd_loss.Pi;
 %     Kip1_loss = dd_loss.Kip1;
 %     K0_loss = dd_loss.Kip1;
@@ -179,7 +179,22 @@ for i = 1:itr
         fprintf("Ki is NOT a stabilizing gain! \n")
         return
     end
-    dd = ddLyap(x, dtau, l , K0, sys); % solve data driven Lyapunov equation
+    dd = ddLyap(x, l, dtau, K0, sys); % solve data driven Lyapunov equation
+    % --- test for seperate data dd solution ---
+    X = cell(10,1);
+    X{1,1} = x(:,1:11);
+    X{2,1} = x(:,11:21);
+    X{3,1} = x(:,21:31);
+    X{4,1} = x(:,31:41);
+    X{5,1} = x(:,41:51);
+    X{6,1} = x(:,51:61);
+    X{7,1} = x(:,61:71);
+    X{8,1} = x(:,71:81);
+    X{9,1} = x(:,81:91);
+    X{10,1} = x(:,91:101);
+    l = 0;
+    dd = ddLyap(X, l, dtau, K0, sys); % solve data driven Lyapunov equation
+    % --- end test for seperate data dd solution ---
     Pi = dd.Pi;
     Kip1 = dd.Kip1;
     K0 = dd.Kip1;

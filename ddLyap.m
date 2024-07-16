@@ -3,9 +3,9 @@ classdef ddLyap < handle
     %   此处显示详细说明
     
     properties
-        x {mustBeNumeric, mustBeFinite},
-        dtau {mustBeNumeric, mustBeFinite},
+        x ,
         l {mustBeNumeric, mustBeFinite},
+        dtau {mustBeNumeric, mustBeFinite},
         Ki {mustBeNumeric, mustBeFinite},
         sys,
         Q {mustBeNumeric, mustBeFinite},
@@ -20,12 +20,15 @@ classdef ddLyap < handle
     end
     
     methods
-        function self = ddLyap(x, dtau, l, Ki, sys)
+        function self = ddLyap(x, l, dtau, Ki, sys)
             %DDLYAP 构造此类的实例
             %   此处显示详细说明
             self.x = x;
             self.dtau = dtau;
-            self.l = l;
+            % l: number of scaler equations
+            % To use continuous data, set l as a none-zero interger
+            % To use seperate data, selt l=0
+            self.l = l; 
             self.Ki = Ki;
             self.sys = sys;
             self.Q = sys.Q;
@@ -34,12 +37,19 @@ classdef ddLyap < handle
 
             self.Pi_lyap = lyap((sys.A - self.B * self.Ki)', self.Q + self.Ki' * self.R * self.Ki);
             self.Kip1_lyap = self.R \ self.B' * self.Pi_lyap;
-            self.solveDataEqu();
-            % self.solveDataEqu_test();
+            
+            if self.l
+                self.solveDataEqu_contData();
+            else
+                self.solveDataEqu_sepData();
+            end
         end
 
-        function solveDataEqu(self)
-            %
+        function solveDataEqu_contData(self)
+            % When passing one continuos data trajectory, this fcn will
+            % evenly divide the data to 'l' segments to formulate scaler
+            % equations
+
             % define data segments
             index_int = (size(self.x,2) - 1) / self.l;
             self.X = cell(self.l,1);
@@ -76,29 +86,26 @@ classdef ddLyap < handle
             self.Kip1 = self.R \ self.B' * self.Pi;     % policy iteration
         end
 
-            function solveDataEqu_test(self)
-            % test20240628
+        function solveDataEqu_sepData(self)
+            % When passing seperate data trajectory as cell, this fcn will
+            % use each row of data in the cell to formulate scaler equations
+
             % define data segments
-            index_int = (size(self.x,2) - 1) / self.l;
-            self.X = cell(self.l,1);
-            for j = 1:self.l 
-                self.X{j} = self.x(:, (index_int*(j-1) + 1 ): (index_int*j + 1 ));
-            end
-
-            % compute data matrices
-            n = size(self.x,1);
+            self.X = self.x;
+            N = size(self.X,1);
+            n = size(self.X{1},1);
+            
             % compute delta_xx
-            delta_xx = zeros(self.l, n*n);
-            for i = 1 : self.l
-                delta_xx(i,:) = kron(self.X{i}(:,end), self.X{i}(:,end))' ...
-                                - kron(self.X{i}(:,1), self.X{i}(:,1))';
+            delta_xx = zeros(N, n*(n+1)/2);
+            for i = 1 : N
+                delta_xx(i,:) = self.traj2bar(self.X{i}(:,end))' - self.traj2bar(self.X{i}(:,1))';
             end
-
+            
             % compute Ixx
-            XkX = cell(self.l,1);
-            int_XkX = cell(self.l,1);
-            I_xx = zeros(self.l, n*n);
-            for j = 1:self.l
+            XkX = cell(N,1);
+            int_XkX = cell(N,1);
+            I_xx = zeros(N, n*n);
+            for j = 1:N
                 XkX{j} = zeros(n*n, size(self.X{j},2));
                 for i = 1:size(self.X{1},2)
                     XkX{j}(:,i) = kron(self.X{j}(:,i),self.X{j}(:,i)); % xx(t) = x(t) (kron) x(t)
@@ -107,11 +114,11 @@ classdef ddLyap < handle
                 I_xx(j,:) = (int_XkX{j}(:,end) - int_XkX{j}(:,1))';
             end
             
-            Q_k = self.Q + self.Ki' * self.R * self.Ki;
-            varXi_k = - I_xx * reshape(Q_k,[n*n, 1]);
-            % Pi_hat = lsqminnorm(delta_xx, varXi_k);   % calculate using least-square
-            vecs_Pi = pinv(delta_xx) * varXi_k;          % calculate using pseudo-inverse
-            self.Pi = reshape(vecs_Pi,[n, n]);             % ddLyap solution
+            Qk = self.Q + self.Ki' * self.R * self.Ki;
+            vec_Qk = reshape(Qk,[n*n,1]);
+            % Pi_hat = lsqminnorm(delta_xx, - I_xx * vec_Qk);   % calculate using least-square
+            vecs_Pi = pinv(delta_xx) * - I_xx * vec_Qk;          % calculate using pseudo-inverse
+            self.Pi = self.vecs2mat(vecs_Pi);             % ddLyap solution
 
             self.Kip1 = self.R \ self.B' * self.Pi;     % policy iteration
         end
