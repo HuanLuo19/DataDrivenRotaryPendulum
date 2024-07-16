@@ -26,6 +26,7 @@ G = [ 0
       0 ];
 A = E \ F;
 B = E \ G;
+% B = [1 1 1 1]';
 nx = size(A,2); %state dimension
 nu = size(B,2); %input dimension
 q1 = 100;
@@ -64,7 +65,8 @@ l = 10;         % number of equations(data segments)
 T_int = 0.05;   % integral time
 T = l * T_int;  % iteration time
 
-K0 = [10 1 1 -0.1];
+% K0 = [10 1 1 -0.1];
+K0 = [10 1 10 1];
 % K1 = [2086.16114717546	358.022891138783	-99.9245069315659	-20.3349766266169];
 % K1 = [1693.85882885054	317.304940008585	-471.780137355098	-68.7236527650644];
 % K0 = K1;
@@ -73,7 +75,7 @@ if ~all(eig(A - B * K0)<0)
     fprintf("K0 is NOT a stabilizing gain! \n")
     return
 end
-itr = 1;
+itr = 7;
 
 Flag_Sim_No_Loss = 1;
 Flag_Sim_Loss = 0;

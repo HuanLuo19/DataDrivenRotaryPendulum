@@ -8,7 +8,8 @@ STEP_SIZE = 5e-3;
 SIMULATION_TIME = inf;
 
 % select controller gain
-K = [10 1 1 -0.1];
+% K = [10 1 1 -0.1];
+K = [10 1 10 1];
 % K = [10 2.0595 26.7286 -1.8444]; % crane K opt
 % K = [-0.7071 -0.8513 -17.4339 -2.0987]; % inverted pendulum K opt
 
@@ -30,7 +31,12 @@ Pi_lyap = lyap((A - B * K)', Q + K' * R * K);
 % --- run simulink --->
 %% Save data
 % write comment and file name
-comment = "K: crane optimal gain. Initial condition: motor angle = 1 and 2";
-filename = "Kopt_2407111658";
+comment = ...
+    "Usage: Data-driven data" + ...
+    "K: crane stable K0. " + ...
+    "Initial condition: pendulum angle = 2. " + ...
+    "Differentiator: no filtering. ";
+filename = "K0_2407161545";
+
 save("data/data_" + filename + ".mat")
 
