@@ -1,7 +1,20 @@
 clear variables
 close all
 clc
-load("data\X_T_2407171817.mat")
+load("data\X_T_2407171746.mat")
+
+%% Plot ALL Data
+figure("Name","All Data")
+sgtitle("All Data",'Interpreter','latex')
+for i = 1:size(X,1)
+    subplot(size(X,1)/1,1,i) % change layout as needed
+    plot(T{i},X{i},'-')
+    % xlabel('$t$','Interpreter','latex')
+    % ylabel('$x$','Interpreter','latex')
+    xlim([T{i}(1),T{i}(end)])
+    grid on
+end
+
 %% Data-driven Solution
 % system
 A = [0    1.0000         0         0;

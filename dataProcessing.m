@@ -18,6 +18,10 @@ classdef dataProcessing < handle
         function [x_out, t_out] = getTimeIntervalData(self,T)
             idx_min = find(abs(self.t - T(1)) < 0.001);
             idx_max = find(abs(self.t - T(2)) < 0.001);
+            if isempty(idx_min) || isempty(idx_max)
+                fprintf("Cannot find data on the interval end point! \n")
+                return
+            end
             x_out = self.x(:,idx_min:idx_max);
             t_out = self.t(:,idx_min:idx_max);
         end

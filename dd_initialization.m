@@ -1,7 +1,6 @@
 clear variables
 close all
 clc
-% load("data/data_Kopt_2407111658.mat")
 %% Initialize simulation
 % set step size and simulation time
 STEP_SIZE = 5e-3;
@@ -28,15 +27,8 @@ if ~all(eig(A - B * K)<0)
 end 
 Pi_lyap = lyap((A - B * K)', Q + K' * R * K);
 
+load("data\K1_2407181636.mat")
+K = Kip1;
 % --- run simulink --->
-%% Save data
-% write comment and file name
-comment = ...
-    "Usage: Data-driven data" + ...
-    "K: crane stable K0. " + ...
-    "Initial condition: pendulum angle = 2. " + ...
-    "Differentiator: no filtering. ";
-filename = "K0_2407161545";
-
-save("data/data_" + filename + ".mat")
-
+%% ---> Save Raw Data
+% run "dd_save_data.m": Save Raw Data section

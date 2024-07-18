@@ -66,7 +66,8 @@ T_int = 0.05;   % integral time
 T = l * T_int;  % iteration time
 
 % K0 = [10 1 1 -0.1];
-K0 = [10 1 10 1];
+% K0 = [10 1 10 1];
+K0 = [330.7524   34.1486  435.6918  -33.4793];
 % K1 = [2086.16114717546	358.022891138783	-99.9245069315659	-20.3349766266169];
 % K1 = [1693.85882885054	317.304940008585	-471.780137355098	-68.7236527650644];
 % K0 = K1;
@@ -75,7 +76,7 @@ if ~all(eig(A - B * K0)<0)
     fprintf("K0 is NOT a stabilizing gain! \n")
     return
 end
-itr = 1;
+itr = 2;
 
 Flag_Sim_No_Loss = 1;
 Flag_Sim_Loss = 0;
@@ -181,19 +182,19 @@ for i = 1:itr
     end
     dd = ddLyap(x, l, dtau, K0, sys); % solve data driven Lyapunov equation
     % --- test for seperate data dd solution ---
-    X = cell(10,1);
-    X{1,1} = x(:,1:11);
-    X{2,1} = x(:,11:21);
-    X{3,1} = x(:,21:31);
-    X{4,1} = x(:,31:41);
-    X{5,1} = x(:,41:51);
-    X{6,1} = x(:,51:61);
-    X{7,1} = x(:,61:71);
-    X{8,1} = x(:,71:81);
-    X{9,1} = x(:,81:91);
-    X{10,1} = x(:,91:101);
-    l = 0;
-    dd = ddLyap(X, l, dtau, K0, sys); % solve data driven Lyapunov equation
+    % X = cell(10,1);
+    % X{1,1} = x(:,1:11);
+    % X{2,1} = x(:,11:21);
+    % X{3,1} = x(:,21:31);
+    % X{4,1} = x(:,31:41);
+    % X{5,1} = x(:,41:51);
+    % X{6,1} = x(:,51:61);
+    % X{7,1} = x(:,61:71);
+    % X{8,1} = x(:,71:81);
+    % X{9,1} = x(:,81:91);
+    % X{10,1} = x(:,91:101);
+    % l = 0;
+    % dd = ddLyap(X, l, dtau, K0, sys); % solve data driven Lyapunov equation
     % --- end test for seperate data dd solution ---
     Pi = dd.Pi;
     Kip1 = dd.Kip1;
