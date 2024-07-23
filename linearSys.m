@@ -50,23 +50,23 @@ classdef linearSys < handle
 
             u = K * x;
 
-            % plot
-            figure
-            % sgtitle("K = " + num2str(K),'Interpreter','latex')
-            % subplot(2,1,1)
-            plot(tspan,x,'.',MarkerSize=10);
-            xlabel('$t$','Interpreter','latex')
-            ylabel('$x$','Interpreter','latex')
-            % ylim([-0.3 0.3])
-            ax = gca;
-            ax.FontSize = 14;
-            % 
-            % subplot(2,1,2)
-            % plot(tspan,u,'.',MarkerSize=10);
+            % % plot
+            % figure
+            % % sgtitle("K = " + num2str(K),'Interpreter','latex')
+            % % subplot(2,1,1)
+            % plot(tspan,x,'.',MarkerSize=10);
             % xlabel('$t$','Interpreter','latex')
-            % ylabel("$u=Kx$",'Interpreter','latex')
+            % ylabel('$x$','Interpreter','latex')
+            % % ylim([-0.3 0.3])
             % ax = gca;
             % ax.FontSize = 14;
+            % % 
+            % % subplot(2,1,2)
+            % % plot(tspan,u,'.',MarkerSize=10);
+            % % xlabel('$t$','Interpreter','latex')
+            % % ylabel("$u=Kx$",'Interpreter','latex')
+            % % ax = gca;
+            % % ax.FontSize = 14;
         end
 
         function generateTestResponseZeroInput(self,T)

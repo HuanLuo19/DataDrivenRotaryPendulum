@@ -4,33 +4,28 @@ clear variables
 close all
 clc
 % --- load raw data
-load("data/data_raw_2407181645.mat")
+load("data\data_240716\data_raw_2407161541.mat")
 % --- Show Raw Data Plot
 generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:))
 
-% Get Switch ON Data
-idx_switchON_all = find(switch_state.Data(1,:)); % get all index when the switch is on
-
-on_time = time.Data(idx_switchON_all)';
-on_time = on_time - on_time(1); % RESET time label from 0
-on_switch_state = switch_state.Data(1,idx_switchON_all);
-on_x = state4dim.Data(idx_switchON_all,:)';
-
+%% Get Switch ON Data
+dataPros_Raw2SwtichON = dataProcessing(state4dim.Data',time.Data',switch_state.Data(1,:));
+[x_switchON, time_switchON, switch_state_ON] = dataPros_Raw2SwtichON.getSwitchOnData();
 % --- Show Switch ON Data Plot
-generatePhyiscalDataPlot("Switch ON Data",on_x,on_time,on_switch_state)
-
+generatePhyiscalDataPlot("Switch ON Data",x_switchON,time_switchON,switch_state_ON)
+% generateStateDataPlot("Switch ON State",x_switchON,time_switchON)
 %% Select Data from Switch ON Data
 X = cell(0,0);            % comment out this line to add data
 T = cell(0,0);            % comment out this line to add data
 % load("data\data_temp.mat")  % comment out this line when add the first data group
 
 % select time interval and segment number and segment offset size
-dataPros = dataProcessing(on_x,on_time);
-T_int = [0,0.2];
-offset_size = 0.2;
+dataPros_SwitchON2Datadriven = dataProcessing(x_switchON,time_switchON,[]);
+T_int = [0,0.05];
+offset_size = 0.05;
 segment_number = 10;
 for i = 1:segment_number
-    [dd_x, dd_t] = dataPros.getTimeIntervalData(T_int);
+    [dd_x, dd_t, ~] = dataPros_SwitchON2Datadriven.getTimeIntervalData(T_int);
     X = [X; dd_x];
     T = [T; dd_t];
     T_int = T_int + offset_size;
@@ -95,6 +90,7 @@ plot(t,x(1,:),'.-',MarkerSize=10)
 plot(t,x(3,:),'.-',MarkerSize=10)
 legend("motor angle","pendulum angle", ...
     'Interpreter','latex',Location="best")
+xlabel('$t$','Interpreter','latex')
 xlim([t(1),t(end)])
 grid on
 
@@ -104,15 +100,16 @@ plot(t,x(2,:),'.-',MarkerSize=10)
 plot(t,x(4,:),'.-',MarkerSize=10)
 legend("motor speed","pendulum speed",...
     'Interpreter','latex',Location="best")
+xlabel('$t$','Interpreter','latex')
 xlim([t(1),t(end)])
 grid on
 
 subplot(3,1,3)
 hold on
 plot(t,swt,'.-',MarkerSize=10)
-xlabel('$t$','Interpreter','latex')
 legend("switch state",...
     'Interpreter','latex',Location="best")
+xlabel('$t$','Interpreter','latex')
 xlim([t(1),t(end)])
 end
 

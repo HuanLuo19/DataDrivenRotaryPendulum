@@ -17,6 +17,9 @@ classdef ddLyap < handle
         Kip1 {mustBeNumeric, mustBeFinite},
         Pi_lyap {mustBeNumeric, mustBeFinite},
         Kip1_lyap {mustBeNumeric, mustBeFinite},
+
+        data_matrix_end_point , % 
+        data_array_integral , %
     end
     
     methods
@@ -84,6 +87,11 @@ classdef ddLyap < handle
             self.Pi = self.vecs2mat(vecs_Pi);             % ddLyap solution
 
             self.Kip1 = self.R \ self.B' * self.Pi;     % policy iteration
+
+            % --- test
+            self.data_matrix_end_point = delta_xx;
+            self.data_array_integral = I_xx;
+            % --- end test
         end
 
         function solveDataEqu_sepData(self)
@@ -121,6 +129,11 @@ classdef ddLyap < handle
             self.Pi = self.vecs2mat(vecs_Pi);             % ddLyap solution
 
             self.Kip1 = self.R \ self.B' * self.Pi;     % policy iteration
+
+            % --- test
+            self.data_matrix_end_point = delta_xx;
+            self.data_array_integral = I_xx;
+            % --- end test
         end
 
         function [x_bar] = traj2bar(~,x)

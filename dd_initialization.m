@@ -30,5 +30,5 @@ Pi_lyap = lyap((A - B * K)', Q + K' * R * K);
 load("data\K1_2407181636.mat")
 K = Kip1;
 % --- run simulink --->
-%% ---> Save Raw Data
-% run "dd_save_data.m": Save Raw Data section
+%% ---> Save  Experiment Raw Data
+% run "dd_save_data.m": Save Experiment Raw Data section

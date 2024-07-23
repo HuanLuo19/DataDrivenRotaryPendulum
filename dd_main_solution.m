@@ -1,13 +1,13 @@
 clear variables
 close all
 clc
-load("data\X_T_2407171746.mat")
+load("data\data_240719\X_T_2407192254.mat")
 
 %% Plot ALL Data
 figure("Name","All Data")
 sgtitle("All Data",'Interpreter','latex')
 for i = 1:size(X,1)
-    subplot(size(X,1)/1,1,i) % change layout as needed
+    subplot(size(X,1)/10,10,i) % [change layout as needed]
     plot(T{i},X{i},'-')
     % xlabel('$t$','Interpreter','latex')
     % ylabel('$x$','Interpreter','latex')
@@ -35,10 +35,13 @@ sys = linearSys(A,B,x0,Q,R);
 
 %%
 l = 0;
+% X = X{1:10,1};
 dd = ddLyap(X, l, STEP_SIZE, K, sys); % solve data driven Lyapunov equation
 Pi = dd.Pi;
 Kip1 = dd.Kip1;
 Pi_lyap = dd.Pi_lyap;
+data_end_point = dd.data_matrix_end_point;
+data_int = dd.data_array_integral;
 
 Delta_i = Pi - Pi_lyap;
 norm_Delta_i = norm(Delta_i);
