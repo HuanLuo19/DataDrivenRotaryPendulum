@@ -6,13 +6,14 @@ clc
 % --- load raw data
 load("data\data_240716\data_raw_2407161541.mat")
 % --- Show Raw Data Plot
-generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:))
+legend_name_experiment = ["motor angle","motor speed","pendulum angle","pendulum speed"];
+generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:),legend_name_experiment)
 
 %% Get Switch ON Data
 dataPros_Raw2SwtichON = dataProcessing(state4dim.Data',time.Data',switch_state.Data(1,:));
 [x_switchON, time_switchON, switch_state_ON] = dataPros_Raw2SwtichON.getSwitchOnData();
 % --- Show Switch ON Data Plot
-generatePhyiscalDataPlot("Switch ON Data",x_switchON,time_switchON,switch_state_ON)
+generatePhyiscalDataPlot("Switch ON Data",x_switchON,time_switchON,switch_state_ON,legend_name_experiment)
 % generateStateDataPlot("Switch ON State",x_switchON,time_switchON)
 %% Select Data from Switch ON Data
 X = cell(0,0);            % comment out this line to add data
@@ -81,25 +82,23 @@ end
 % dd_x(4,:) = smoothdata(dd_x(4,:),num2str(smooth_mehod),winsize);
 
 %% Generate Plots Fcns
-function generatePhyiscalDataPlot(title,x,t,swt)
+function generatePhyiscalDataPlot(title,x,t,swt,LegendName)
 figure("Name",title)
 sgtitle(title,'Interpreter','latex')
 subplot(3,1,1)
 hold on
-plot(t,x(1,:),'.-',MarkerSize=10)
-plot(t,x(3,:),'.-',MarkerSize=10)
-legend("motor angle","pendulum angle", ...
-    'Interpreter','latex',Location="best")
+plot(t,x(1,:),'.-','DisplayName',LegendName(1),MarkerSize=10)
+plot(t,x(3,:),'.-','DisplayName',LegendName(3),MarkerSize=10)
+legend('Interpreter','latex',Location="best")
 xlabel('$t$','Interpreter','latex')
 xlim([t(1),t(end)])
 grid on
 
 subplot(3,1,2)
 hold on
-plot(t,x(2,:),'.-',MarkerSize=10)
-plot(t,x(4,:),'.-',MarkerSize=10)
-legend("motor speed","pendulum speed",...
-    'Interpreter','latex',Location="best")
+plot(t,x(2,:),'.-','DisplayName',LegendName(2),MarkerSize=10)
+plot(t,x(4,:),'.-','DisplayName',LegendName(4),MarkerSize=10)
+legend('Interpreter','latex',Location="best")
 xlabel('$t$','Interpreter','latex')
 xlim([t(1),t(end)])
 grid on

@@ -156,7 +156,7 @@ classdef ddLyap < handle
         end
 
         function [P] = vecs2mat(~,vecs_P)
-            % HAT2MAT
+            % VECS2MAT
             % P must be symmetric
             % P = [a b;
             %      b c]

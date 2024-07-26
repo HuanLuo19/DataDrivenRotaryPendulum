@@ -37,7 +37,7 @@ R = 1;
 % Generate Raw Simulation Data
 STEP_SIZE = 5e-3; % step size
 % IC
-x0 = [-2 0 0 0]';
+x0 = [-0.2 0 0.2 0]';
 % FB Gain
 K = [10 1 10 1];
 % K = [10 1 1 -0.1];
@@ -51,34 +51,38 @@ sys = linearSys(A,B,x0,Q,R);
 
 % Generate sim data
 T_sim = 10;
-[x_sim_raw,u_sim_raw,t_sim_raw] = sys.ResponseFromGain(K,STEP_SIZE,T_sim);
-generateStateDataPlot("Simulation State Data",x_sim_raw,t_sim_raw)
-% hold on
-% generatePhyiscalDataPlot("a",x,tspan) % use this to compare with experiment data
+[x_sim_linear,u_sim_linear,t_sim_linear] = sys.ResponseFromGain(K,STEP_SIZE,T_sim);
+% generateStateDataPlot("Simulation State Data",x_sim_raw,t_sim_raw)
 
-%% Select Data from Sim Raw Data
+% ------ use this to compare with experiment data
+legend_name_linear = ["motor angle sim linear","motor speed sim linear","pendulum angle sim linear","pendulum speed sim linear"];
+hold on
+generatePhyiscalDataPlot("a",x_sim_linear,t_sim_linear,legend_name_linear) 
+% ------
+
+%% Select Data from Linear Sim Data
 X = cell(0,0);            % comment out this line to add data
 T = cell(0,0);            % comment out this line to add data
 % load("data\data_temp.mat")  % comment out this line when add the first data group
 
 % select time interval and segment number and segment offset size
-dataPros_SimRaw2Datadriven = dataProcessing(x_sim_raw,t_sim_raw,[]);
-T_int = [0,0.2];
+dataPros_SimLinear2Datadriven = dataProcessing(x_sim_linear,t_sim_linear,[]);
+T_int = [0,0.05];
 offset_size = 0.05;
 segment_number = 10;
 for i = 1:segment_number
-    [x_dd, t_dd, ~] = dataPros_SimRaw2Datadriven.getTimeIntervalData(T_int);
+    [x_dd, t_dd, ~] = dataPros_SimLinear2Datadriven.getTimeIntervalData(T_int);
     X = [X; x_dd];
     T = [T; t_dd];
     T_int = T_int + offset_size;
 end
 
-%% Plot ALL Data
-figure("Name","All Data")
-sgtitle("All Data",'Interpreter','latex')
+%% Plot Data-driven Data
+figure("Name","All Data-driven Data")
+sgtitle("All Data-driven Data - Linear System",'Interpreter','latex')
 for i = 1:size(X,1)
     subplot(size(X,1)/segment_number,segment_number,i)
-    plot(T{i},X{i},'.-',MarkerSize=10)
+    plot(T{i},X{i},'b.-',MarkerSize=10)
     xlabel('$t$','Interpreter','latex')
     ylabel('$x$','Interpreter','latex')
     xlim([T{i}(1),T{i}(end)])
@@ -86,39 +90,36 @@ for i = 1:size(X,1)
 end
 %% Data-driven Solution
 l = 0;
-dd_sim = ddLyap(X, l, STEP_SIZE, K, sys); % solve data driven Lyapunov equation
-Pi = dd_sim.Pi;
-Kip1 = dd_sim.Kip1;
-data_end_point = dd_sim.data_matrix_end_point;
-data_int = dd_sim.data_array_integral;
+dd_sim_linear = ddLyap(X, l, STEP_SIZE, K, sys); % solve data driven Lyapunov equation
+Pi = dd_sim_linear.Pi;
+Kip1 = dd_sim_linear.Kip1;
+data_end_point = dd_sim_linear.data_matrix_end_point;
+data_int = dd_sim_linear.data_array_integral;
 
 % calculate error matrix
-Delta_i = Pi - dd_sim.Pi_lyap;
+Delta_i = Pi - dd_sim_linear.Pi_lyap;
 norm_Delta_i = norm(Delta_i);
 fprintf(['|Delta_i| = ', '\n'])
 fprintf([num2str(norm(Delta_i)), '\n'])
 
-%%
-function generatePhyiscalDataPlot(title,x,t)
+
+%% --------------------------- Functions --------------------------
+function generatePhyiscalDataPlot(title,x,t,LegendName)
 % figure("Name",title)
 % sgtitle(title,'Interpreter','latex')
 subplot(3,1,1)
 hold on
-plot(t,x(1,:),'--',LineWidth=2)
-plot(t,x(3,:),'--',LineWidth=2)
-legend("motor angle","pendulum angle", ...
-    "motor angle SIM","pendulum angle SIM", ...
-    'Interpreter','latex',Location="best")
+plot(t,x(1,:),':','DisplayName',LegendName(1),LineWidth=2)
+plot(t,x(3,:),':','DisplayName',LegendName(3),LineWidth=2)
+legend('Interpreter','latex',Location="best")
 xlim([t(1),t(end)])
 grid on
 
 subplot(3,1,2)
 hold on
-plot(t,x(2,:),'--',LineWidth=2)
-plot(t,x(4,:),'--',LineWidth=2)
-legend("motor speed","pendulum speed",...
-    "motor speed SIM","pendulum speed SIM",...
-    'Interpreter','latex',Location="best")
+plot(t,x(2,:),':','DisplayName',LegendName(2),LineWidth=2)
+plot(t,x(4,:),':','DisplayName',LegendName(4),LineWidth=2)
+legend('Interpreter','latex',Location="best")
 xlim([t(1),t(end)])
 grid on
 end
