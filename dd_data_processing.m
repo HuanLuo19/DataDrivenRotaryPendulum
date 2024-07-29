@@ -3,8 +3,59 @@
 clear variables
 close all
 clc
-% --- load raw data
-load("data\data_240716\data_raw_2407161541.mat")
+
+%% Load All Raw Data from Folder
+dir_path = "data\data_240729\";
+matlist = dir(dir_path + '*.mat');
+X = cell(0,0);            % comment out this line to add data
+T = cell(0,0);            % comment out this line to add data
+% load("data\data_temp.mat")  % comment out this line when add the first data group
+for i = 1:length(matlist)
+    load(dir_path + matlist(i).name)
+    dataPros_Raw2SwtichON = dataProcessing(state4dim.Data',time.Data',switch_state.Data(1,:));
+    [x_switchON, time_switchON, switch_state_ON] = dataPros_Raw2SwtichON.getSwitchOnData();
+
+    %
+    % legend_name_experiment = ["motor angle","motor speed","pendulum angle","pendulum speed"];
+    % generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:),legend_name_experiment)
+    % generatePhyiscalDataPlot("Switch ON Data",x_switchON,time_switchON,switch_state_ON,legend_name_experiment)
+
+    % select time interval and segment number and segment offset size
+    dataPros_SwitchON2Datadriven = dataProcessing(x_switchON,time_switchON,[]);
+    T_int = [0.2,0.7];
+    offset_size = 0.5;
+    segment_number = 2;
+    for i = 1:segment_number
+        [dd_x, dd_t, ~] = dataPros_SwitchON2Datadriven.getTimeIntervalData(T_int);
+        X = [X; dd_x];
+        T = [T; dd_t];
+        T_int = T_int + offset_size;
+    end
+end
+
+% plot all segments
+figure("Name","All Data")
+sgtitle("All Data",'Interpreter','latex')
+for i = 1:size(X,1)
+    % subplot(size(X,1)/length(matlist),length(matlist),i)
+    subplot(4,10,i)
+    plot(T{i},X{i},'.-',MarkerSize=10)
+    xlabel('$t$','Interpreter','latex')
+    ylabel('$x$','Interpreter','latex')
+    xlim([T{i}(1),T{i}(end)])
+    grid on
+    pbaspect([1 3 1])
+end
+
+% get segments IC
+x0_all = zeros(size(X{1},1),size(X,1));
+for i = 1:size(X,1)
+    x0_all(:,i) = X{i}(:,i);
+end
+figure
+plot(1:40,x0_all(:,1:40),'*-')
+%% --- Load Single Raw Data
+load("data\data_240729\data_raw_2407291613.mat")
 % --- Show Raw Data Plot
 legend_name_experiment = ["motor angle","motor speed","pendulum angle","pendulum speed"];
 generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:),legend_name_experiment)
@@ -32,7 +83,7 @@ for i = 1:segment_number
     T_int = T_int + offset_size;
 end
 
-% Plot ALL Data
+%% Plot ALL Data
 figure("Name","All Data")
 sgtitle("All Data",'Interpreter','latex')
 for i = 1:size(X,1)
