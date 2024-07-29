@@ -33,7 +33,7 @@ for i = 1:length(matlist)
     end
 end
 
-% plot all segments
+%% plot all segments
 figure("Name","All Data")
 sgtitle("All Data",'Interpreter','latex')
 for i = 1:size(X,1)
@@ -44,7 +44,6 @@ for i = 1:size(X,1)
     ylabel('$x$','Interpreter','latex')
     xlim([T{i}(1),T{i}(end)])
     grid on
-    pbaspect([1 3 1])
 end
 
 % get segments IC
