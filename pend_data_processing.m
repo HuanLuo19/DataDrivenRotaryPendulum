@@ -135,43 +135,43 @@ end
 
 %% Generate Plots Fcns
 function generatePhyiscalDataPlot(title,x,t,swt,LegendName)
-figure("Name",title)
-sgtitle(title,'Interpreter','latex')
-subplot(3,1,1)
-hold on
-plot(t,x(1,:),'.-','DisplayName',LegendName(1),MarkerSize=10)
-plot(t,x(3,:),'.-','DisplayName',LegendName(3),MarkerSize=10)
-legend('Interpreter','latex',Location="best")
-xlabel('$t$','Interpreter','latex')
-xlim([t(1),t(end)])
-grid on
-
-subplot(3,1,2)
-hold on
-plot(t,x(2,:),'.-','DisplayName',LegendName(2),MarkerSize=10)
-plot(t,x(4,:),'.-','DisplayName',LegendName(4),MarkerSize=10)
-legend('Interpreter','latex',Location="best")
-xlabel('$t$','Interpreter','latex')
-xlim([t(1),t(end)])
-grid on
-
-subplot(3,1,3)
-hold on
-plot(t,swt,'.-',MarkerSize=10)
-legend("switch state",...
-    'Interpreter','latex',Location="best")
-xlabel('$t$','Interpreter','latex')
-xlim([t(1),t(end)])
+    figure("Name",title)
+    sgtitle(title,'Interpreter','latex')
+    subplot(3,1,1)
+    hold on
+    plot(t,x(1,:),'.-','DisplayName',LegendName(1),MarkerSize=10)
+    plot(t,x(3,:),'.-','DisplayName',LegendName(3),MarkerSize=10)
+    legend('Interpreter','latex',Location="best")
+    xlabel('$t$','Interpreter','latex')
+    xlim([t(1),t(end)])
+    grid on
+    
+    subplot(3,1,2)
+    hold on
+    plot(t,x(2,:),'.-','DisplayName',LegendName(2),MarkerSize=10)
+    plot(t,x(4,:),'.-','DisplayName',LegendName(4),MarkerSize=10)
+    legend('Interpreter','latex',Location="best")
+    xlabel('$t$','Interpreter','latex')
+    xlim([t(1),t(end)])
+    grid on
+    
+    subplot(3,1,3)
+    hold on
+    plot(t,swt,'.-',MarkerSize=10)
+    legend("switch state",...
+        'Interpreter','latex',Location="best")
+    xlabel('$t$','Interpreter','latex')
+    xlim([t(1),t(end)])
 end
 
 function generateStateDataPlot(title,x,t)
-figure("Name",title)
-sgtitle(title,'Interpreter','latex')
-plot(t,x,'.-',MarkerSize=10);
-xlabel('$t$','Interpreter','latex')
-ylabel('$x$','Interpreter','latex')
-xlim([t(1),t(end)])
-grid on
-ax = gca;
-ax.FontSize = 14;
+    figure("Name",title)
+    sgtitle(title,'Interpreter','latex')
+    plot(t,x,'.-',MarkerSize=10);
+    xlabel('$t$','Interpreter','latex')
+    ylabel('$x$','Interpreter','latex')
+    xlim([t(1),t(end)])
+    grid on
+    ax = gca;
+    ax.FontSize = 14;
 end

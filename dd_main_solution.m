@@ -1,9 +1,43 @@
 clear variables
 close all
 clc
-load("data\data_240719\X_T_2407192254.mat")
+% load("data\data_240729\X_T_2407291757.mat")
+% load("data\data_240729\linear_sim_X_T_2407291757.mat")
+% X_linear = X_sim;
+% figure("Name","All Data")
+% sgtitle("All Data",'Interpreter','latex')
+% for i = 1:size(X,1)
+%     subplot(size(X,1)/10,10,i) % [change layout as needed]
+%     plot(T{i},X_linear{i},'r--',LineWidth=2)
+%     hold on
+%     plot(T{i},X{i},'g-',LineWidth=1)
+%     hold off
+%     % xlabel('$t$','Interpreter','latex')
+%     % ylabel('$x$','Interpreter','latex')
+%     xlim([T{i}(1),T{i}(end)])
+%     grid on
+% end
 
+load("data\data_240729\linear_sim_X_T_2407291757.mat")
+X_linear = X_sim;
+load("data\data_240729\nonlinear_sim_X_T_2407291757.mat")
+X_nonlinear = X_sim;
+
+figure("Name","All Data")
+sgtitle("All Data",'Interpreter','latex')
+for i = 1:size(X_linear,1)
+    subplot(size(X_linear,1)/10,10,i) % [change layout as needed]
+    plot(T{i},X_linear{i},'r-',LineWidth=2)
+    hold on
+    plot(T{i},X_nonlinear{i},'b--',LineWidth=2)
+    hold off
+    % xlabel('$t$','Interpreter','latex')
+    % ylabel('$x$','Interpreter','latex')
+    xlim([T{i}(1),T{i}(end)])
+    grid on
+end
 %% Plot ALL Data
+X = X_sim;
 figure("Name","All Data")
 sgtitle("All Data",'Interpreter','latex')
 for i = 1:size(X,1)
