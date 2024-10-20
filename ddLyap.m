@@ -65,7 +65,7 @@ classdef ddLyap < handle
             % compute delta_xx
             delta_xx = zeros(self.l, n*(n+1)/2);
             for i = 1 : self.l
-                delta_xx(i,:) = self.traj2bar(self.X{i}(:,end))' - self.traj2bar(self.X{i}(:,1))';
+                delta_xx(i,:) = self.traj2bar(self.X{i}(:,end))' - self.traj2bar(self.X{i}(:,1))'; % delta_xx = [x(t1) - x(t0),...]
             end
             % compute Ixx
             XkX = cell(self.l,1);

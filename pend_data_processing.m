@@ -4,34 +4,102 @@ clear variables
 close all
 clc
 
-%% Load All Raw Data from Folder
-dir_path = "data\data_240729\";
+%% Load All Raw Data from Folder 241020
+dir_path = "data\data_241020\";
 matlist = dir(dir_path + 'data_raw' + '*.mat');
-X = cell(0,0);            % comment out this line to add data
-T = cell(0,0);            % comment out this line to add data
-% load("data\data_temp.mat")  % comment out this line when add the first data group
-for i = 1:length(matlist)
-    load(dir_path + matlist(i).name)
-    dataPros_Raw2SwtichON = dataProcessing(state4dim.Data',time.Data',switch_state.Data(1,:));
-    [x_switchON, time_switchON, switch_state_ON] = dataPros_Raw2SwtichON.getSwitchOnData();
+load(dir_path + matlist(1).name)
+%
+legend_name_experiment = ["motor angle","motor speed","pendulum angle","pendulum speed"];
+generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:),legend_name_experiment)
 
-    %
-    % legend_name_experiment = ["motor angle","motor speed","pendulum angle","pendulum speed"];
-    % generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:),legend_name_experiment)
-    % generatePhyiscalDataPlot("Switch ON Data",x_switchON,time_switchON,switch_state_ON,legend_name_experiment)
-
-    % select time interval and segment number and segment offset size
-    dataPros_SwitchON2Datadriven = dataProcessing(x_switchON,time_switchON,[]);
-    T_int = [0.2,0.7];
-    offset_size = 0.5;
-    segment_number = 2;
-    for i = 1:segment_number
-        [dd_x, dd_t, ~] = dataPros_SwitchON2Datadriven.getTimeIntervalData(T_int);
-        X = [X; dd_x];
-        T = [T; dd_t];
-        T_int = T_int + offset_size;
+segment_number = 20;
+idx_start = zeros(1,segment_number);
+idx_end = zeros(1,segment_number);
+k_s = 1;
+k_e = 1;
+for i = 1:size(time.data,1) - 1 
+    if switch_state.Data(1,i) == 0 && switch_state.Data(1,i+1) == 1
+        idx_start(k_s) = i + 1;
+        k_s = k_s + 1;
+    end
+    if switch_state.Data(1,i) == 1 && switch_state.Data(1,i+1) == 0
+        idx_end(k_e) = i;
+        k_e = k_e + 1;
     end
 end
+% plot raw data
+X_raw = cell(segment_number,1);
+T_raw = cell(segment_number,1);
+for i = 1:segment_number
+    x_raw = state4dim.Data(idx_start(i):idx_end(i),:)';
+    t_raw = time.Data(idx_start(i):idx_end(i)) - time.Data(idx_start(i));
+    X_raw{i} = x_raw;
+    T_raw{i} = t_raw;
+end
+figure("Name","RAW all Data")
+sgtitle("All Data",'Interpreter','latex')
+for i = 1:segment_number
+    subplot(4,5,i)
+    plot(T_raw{i},X_raw{i},'.-',MarkerSize=10)
+    xlabel('$t$','Interpreter','latex')
+    ylabel('$x$','Interpreter','latex')
+    xlim([T_raw{i}(1),T_raw{i}(end)])
+    grid on
+end
+% get dd data
+T_int = [0.5,1.5];
+X = cell(segment_number,1);
+T = cell(segment_number,1);
+for i = 1:segment_number
+    dd_x = X_raw{i}(:,T_int(1)/STEP_SIZE:T_int(2)/STEP_SIZE);
+    dd_t = T_raw{i}(T_int(1)/STEP_SIZE:T_int(2)/STEP_SIZE);
+    X{i} = dd_x;
+    T{i} = dd_t;
+end
+figure("Name","Data-driven Data")
+sgtitle("All Data",'Interpreter','latex')
+for i = 1:segment_number
+    subplot(4,5,i)
+    plot(T{i},X{i},'.-',MarkerSize=10)
+    xlabel('$t$','Interpreter','latex')
+    ylabel('$x$','Interpreter','latex')
+    xlim([T{i}(1),T{i}(end)])
+    grid on
+end
+%%
+% select time interval and segment number and segment offset size
+dataPros_SwitchON2Datadriven = dataProcessing(x_switchON,time_switchON,[]);
+
+
+
+%% Load All Raw Data from Folder 240729
+% dir_path = "data\data_240729\";
+% matlist = dir(dir_path + 'data_raw' + '*.mat');
+% X = cell(0,0);            % comment out this line to add data
+% T = cell(0,0);            % comment out this line to add data
+% % load("data\data_temp.mat")  % comment out this line when add the first data group
+% for i = 1:length(matlist)
+%     load(dir_path + matlist(i).name)
+%     dataPros_Raw2SwtichON = dataProcessing(state4dim.Data',time.Data',switch_state.Data(1,:));
+%     [x_switchON, time_switchON, switch_state_ON] = dataPros_Raw2SwtichON.getSwitchOnData();
+% 
+%     %
+%     % legend_name_experiment = ["motor angle","motor speed","pendulum angle","pendulum speed"];
+%     % generatePhyiscalDataPlot("Raw Data",state4dim.Data',time.Data,switch_state.Data(1,:),legend_name_experiment)
+%     % generatePhyiscalDataPlot("Switch ON Data",x_switchON,time_switchON,switch_state_ON,legend_name_experiment)
+% 
+%     % select time interval and segment number and segment offset size
+%     dataPros_SwitchON2Datadriven = dataProcessing(x_switchON,time_switchON,[]);
+%     T_int = [0.2,0.7];
+%     offset_size = 0.5;
+%     segment_number = 2;
+%     for i = 1:segment_number
+%         [dd_x, dd_t, ~] = dataPros_SwitchON2Datadriven.getTimeIntervalData(T_int);
+%         X = [X; dd_x];
+%         T = [T; dd_t];
+%         T_int = T_int + offset_size;
+%     end
+% end
 
 %% plot all segments
 figure("Name","All Data")

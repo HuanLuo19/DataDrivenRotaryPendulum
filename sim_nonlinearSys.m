@@ -16,7 +16,12 @@ L1 = 9.20e-02;  % 9.2cm
 
 %% Initial Condition
 % x0 = [-0.2 0 0 0]'; % comment out this line to run this script with different x0
-K = [10 1 10 1];
+% x0 = [-0.2693 1.4963 0.2051 -0.8728]';
+% K = [10 1 10 1];
+K = [5.9934 0.5486 6.8171 0.3307]; % K_1 with R=100 nonlinear iteration ppt:20241016
+K = [4.5409 0.2752 5.4382 0.0631]; % K_2 with R=100 nonlinear iteration ppt:20241016
+K = [3.9809 0.1691 4.9928 -0.0086]; % K_3 with R=100 nonlinear iteration ppt:20241016
+K = [3.8471 0.1344 4.9866 0.0033]; % K_4 with R=100 nonlinear iteration ppt:20241016
 
 sim_NL = sim('sim_nonlinear_pend.slx');
 
@@ -25,7 +30,8 @@ legend_name_NL = ["motor angle sim NL","motor speed sim NL","pendulum angle sim 
 
 figure("Name","Nonlinear Simulation")
 sgtitle("Nonlinear Simulation",'Interpreter','latex')
-generatePhyiscalDataPlot("a",sim_NL.state4dim.Data',sim_NL.tsim',legend_name_NL) 
+generatePhyiscalDataPlot("a",sim_NL.state4dim.Data',sim_NL.tsim',legend_name_NL)
+generateStateDataPlot("Simulation State Data",sim_NL.state4dim.Data',sim_NL.tsim')
 
 % ---- compare with experiment data
 % hold on
@@ -116,5 +122,18 @@ plot(t,x(4,:),'--','DisplayName',LegendName(4),LineWidth=2)
 legend('Interpreter','latex',Location="best")
 xlim([t(1),t(end)])
 grid on
+end
+
+function generateStateDataPlot(title,x,t)
+figure("Name",title)
+sgtitle(title,'Interpreter','latex')
+plot(t,x,'.-',MarkerSize=10);
+legend('$\theta_1$','$\dot \theta_1$','$\phi_2$','$\dot \phi_2$','Interpreter','latex')
+xlabel('$t$','Interpreter','latex')
+ylabel('$x$','Interpreter','latex')
+xlim([t(1),t(end)])
+grid on
+ax = gca;
+ax.FontSize = 14;
 end
 

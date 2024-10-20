@@ -32,7 +32,7 @@ nu = size(B,2); %input dimension
 q1 = 100;
 q3 = 1000;
 Q = diag([q1 0 q3 0]);
-R = 1;
+R = 100;
 
 x0 = [1 0 0 0]';
 sys_0 = linearSys(A,B,x0,Q,R);
@@ -76,7 +76,7 @@ if ~all(eig(A - B * K0)<0)
     fprintf("K0 is NOT a stabilizing gain! \n")
     return
 end
-itr = 4;
+itr = 5;
 
 Flag_Sim_No_Loss = 1;
 Flag_Sim_Loss = 0;
@@ -232,4 +232,36 @@ xlabel('$t$','Interpreter','latex')
 title('$u$','Interpreter','latex')
 ax = gca;
 ax.FontSize = 14;
+
+figure
+Ki_itr_plot = zeros(itr,nx);
+for i = 1:itr + 1
+    Ki_itr_plot(i,:) = Ki_itr{i};
+end
+%
+Ki_itr_plot = [10 1 10 1;
+    5.9934 0.5486 6.8171 0.3307;
+    4.5409 0.2752 5.4382 0.0631;
+    3.9809 0.1691 4.9928 -0.0086;
+    3.8471 0.1344 4.9866 0.0033;
+    3.9456 0.1222 5.0904 0.0047];
+%
+plot(0:itr, Ki_itr_plot,'.-', ...
+    MarkerSize=24, LineWidth=1.5);
+hold on
+plot(itr + 1, sys_0.K_opt(1),'*',MarkerEdgeColor="#0072BD",MarkerSize=10, LineWidth=1.5)
+plot(itr + 1, sys_0.K_opt(2),'*',MarkerEdgeColor="#D95319",MarkerSize=10, LineWidth=1.5)
+plot(itr + 1, sys_0.K_opt(3),'*',MarkerEdgeColor="#EDB120",MarkerSize=10, LineWidth=1.5)
+plot(itr + 1, sys_0.K_opt(4),'*',MarkerEdgeColor="#7E2F8E",MarkerSize=10, LineWidth=1.5)
+legend('$\hat K$(1)', '$\hat K$(2)','$\hat K$(3)','$\hat K$(4)', ...
+    '$K^*$(1)','$K^*$(2)','$K^*$(3)','$K^*$(4)', ...
+    'Interpreter','latex',Location="best")
+hold off
+xlim([0,itr + 1])
+xlabel('$t$','Interpreter','latex')
+ylabel('Numeric value')
+title('$K$ matrix elements','Interpreter','latex')
+ax = gca;
+ax.FontSize = 14;
+
 end

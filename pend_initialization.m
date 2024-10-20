@@ -8,9 +8,10 @@ SIMULATION_TIME = inf;
 
 % select controller gain
 % K = [10 1 1 -0.1];
-K = [10 1 10 1];
-% K = [10 2.0595 26.7286 -1.8444]; % crane K opt
-% K = [-0.7071 -0.8513 -17.4339 -2.0987]; % inverted pendulum K opt
+% K = [10 1 10 1]; % crane stable K
+% K = [10 2.0595 26.7286 -1.8444]; % crane opt K
+K = [-0.7071 -0.8513 -17.4339 -2.0987]; % inverted opt K
+% K = [-0.7071 -0.8513 -17.4339 -2.0987]; % inverted opt K
 
 %% system
 A = [0    1.0000         0         0;

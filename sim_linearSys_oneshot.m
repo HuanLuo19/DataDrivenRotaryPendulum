@@ -33,7 +33,7 @@ nu = size(B,2); %input dimension
 q1 = 100;
 q3 = 1000;
 Q = diag([q1 0 q3 0]);
-R = 1;
+R = 100;
 
 % Generate Raw Simulation Data
 STEP_SIZE = 5e-3; % step size
@@ -42,10 +42,13 @@ STEP_SIZE = 5e-3; % step size
 % x0 = [-0.2 0 0.2 0]'; % comment out this line to run this script with different x0
 
 % FB Gain
-K = [10 1 10 1];
+% K = [10 1 10 1];
 % K = [10 1 1 -0.1];
-% K1 = [330.7524   34.1486  435.6918  -33.4793];
-% K = K1;
+K = [5.9934 0.5486 6.8171 0.3307]; % K_1 with R=100 nonlinear iteration ppt:20241016
+K = [4.5409 0.2752 5.4382 0.0631]; % K_2 with R=100 nonlinear iteration ppt:20241016
+K = [3.9809 0.1691 4.9928 -0.0086]; % K_3 with R=100 nonlinear iteration ppt:20241016
+K = [3.8471 0.1344 4.9866 0.0033]; % K_4 with R=100 nonlinear iteration ppt:20241016
+
 if ~all(eig(A - B * K)<0)
     fprintf("K0 is NOT a stabilizing gain! \n")
     return
