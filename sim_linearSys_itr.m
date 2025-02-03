@@ -32,7 +32,7 @@ nu = size(B,2); %input dimension
 q1 = 100;
 q3 = 1000;
 Q = diag([q1 0 q3 0]);
-R = 100;
+R = 1;
 
 x0 = [1 0 0 0]';
 sys_0 = linearSys(A,B,x0,Q,R);
@@ -76,7 +76,7 @@ if ~all(eig(A - B * K0)<0)
     fprintf("K0 is NOT a stabilizing gain! \n")
     return
 end
-itr = 5;
+itr = 30;
 
 Flag_Sim_No_Loss = 1;
 Flag_Sim_Loss = 0;
@@ -199,7 +199,12 @@ for i = 1:itr
     % --- end test for seperate data dd solution ---
     Pi = dd.Pi;
     Kip1 = dd.Kip1;
-    K0 = dd.Kip1;
+
+    e = 0.01;
+    Kip1_hat = (1 - e) * K0 + e * Kip1;
+    K0 = Kip1_hat;
+    % K0 = Kip1;
+
     x0 = x(:,end);
     % log data
     x_itr = [x_itr x];
@@ -238,14 +243,14 @@ Ki_itr_plot = zeros(itr,nx);
 for i = 1:itr + 1
     Ki_itr_plot(i,:) = Ki_itr{i};
 end
-%
-Ki_itr_plot = [10 1 10 1;
-    5.9934 0.5486 6.8171 0.3307;
-    4.5409 0.2752 5.4382 0.0631;
-    3.9809 0.1691 4.9928 -0.0086;
-    3.8471 0.1344 4.9866 0.0033;
-    3.9456 0.1222 5.0904 0.0047];
-%
+% %
+% Ki_itr_plot = [10 1 10 1;
+%     5.9934 0.5486 6.8171 0.3307;
+%     4.5409 0.2752 5.4382 0.0631;
+%     3.9809 0.1691 4.9928 -0.0086;
+%     3.8471 0.1344 4.9866 0.0033;
+%     3.9456 0.1222 5.0904 0.0047];
+% %
 plot(0:itr, Ki_itr_plot,'.-', ...
     MarkerSize=24, LineWidth=1.5);
 hold on

@@ -1,8 +1,8 @@
-% clear variables
-% close all
-% clc
+clear variables
+close all
+clc
 
-SIMULATION_TIME = 20;
+SIMULATION_TIME = 10;
 STEP_SIZE = 5e-3; % step size
 %% Systen Parameters
 identified_para = matfile("data/identified_parameters.mat");
@@ -16,12 +16,12 @@ L1 = 9.20e-02;  % 9.2cm
 
 %% Initial Condition
 % x0 = [-0.2 0 0 0]'; % comment out this line to run this script with different x0
-% x0 = [-0.2693 1.4963 0.2051 -0.8728]';
-% K = [10 1 10 1];
-K = [5.9934 0.5486 6.8171 0.3307]; % K_1 with R=100 nonlinear iteration ppt:20241016
-K = [4.5409 0.2752 5.4382 0.0631]; % K_2 with R=100 nonlinear iteration ppt:20241016
-K = [3.9809 0.1691 4.9928 -0.0086]; % K_3 with R=100 nonlinear iteration ppt:20241016
-K = [3.8471 0.1344 4.9866 0.0033]; % K_4 with R=100 nonlinear iteration ppt:20241016
+x0 = [-0.2693 1.4963 0.2051 -0.8728]';
+K = [10 1 10 1];
+% K = [5.9934 0.5486 6.8171 0.3307]; % K_1 with R=100 nonlinear iteration ppt:20241016
+% K = [4.5409 0.2752 5.4382 0.0631]; % K_2 with R=100 nonlinear iteration ppt:20241016
+% K = [3.9809 0.1691 4.9928 -0.0086]; % K_3 with R=100 nonlinear iteration ppt:20241016
+% K = [3.8471 0.1344 4.9866 0.0033]; % K_4 with R=100 nonlinear iteration ppt:20241016
 
 sim_NL = sim('sim_nonlinear_pend.slx');
 

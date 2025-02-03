@@ -82,7 +82,7 @@ classdef ddLyap < handle
             
             Qk = self.Q + self.Ki' * self.R * self.Ki;
             vec_Qk = reshape(Qk,[n*n,1]);
-            % Pi_hat = lsqminnorm(delta_xx, - I_xx * vec_Qk);   % calculate using least-square
+            % vecs_Pi = lsqminnorm(delta_xx, - I_xx * vec_Qk);   % calculate using least-square
             vecs_Pi = pinv(delta_xx) * - I_xx * vec_Qk;          % calculate using pseudo-inverse
             self.Pi = self.vecs2mat(vecs_Pi);             % ddLyap solution
 

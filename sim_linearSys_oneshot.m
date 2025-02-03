@@ -44,10 +44,10 @@ STEP_SIZE = 5e-3; % step size
 % FB Gain
 % K = [10 1 10 1];
 % K = [10 1 1 -0.1];
-K = [5.9934 0.5486 6.8171 0.3307]; % K_1 with R=100 nonlinear iteration ppt:20241016
-K = [4.5409 0.2752 5.4382 0.0631]; % K_2 with R=100 nonlinear iteration ppt:20241016
-K = [3.9809 0.1691 4.9928 -0.0086]; % K_3 with R=100 nonlinear iteration ppt:20241016
-K = [3.8471 0.1344 4.9866 0.0033]; % K_4 with R=100 nonlinear iteration ppt:20241016
+% K = [5.9934 0.5486 6.8171 0.3307]; % K_1 with R=100 nonlinear iteration ppt:20241016
+% K = [4.5409 0.2752 5.4382 0.0631]; % K_2 with R=100 nonlinear iteration ppt:20241016
+% K = [3.9809 0.1691 4.9928 -0.0086]; % K_3 with R=100 nonlinear iteration ppt:20241016
+% K = [3.8471 0.1344 4.9866 0.0033]; % K_4 with R=100 nonlinear iteration ppt:20241016
 
 if ~all(eig(A - B * K)<0)
     fprintf("K0 is NOT a stabilizing gain! \n")
@@ -61,9 +61,9 @@ T_sim = 10;
 % generateStateDataPlot("Simulation State Data",x_sim_raw,t_sim_raw)
 
 % ------ use this to compare with experiment data
-legend_name_linear = ["motor angle sim linear","motor speed sim linear","pendulum angle sim linear","pendulum speed sim linear"];
-hold on
-generatePhyiscalDataPlot("a",x_sim_linear,t_sim_linear,legend_name_linear) 
+% legend_name_linear = ["motor angle sim linear","motor speed sim linear","pendulum angle sim linear","pendulum speed sim linear"];
+% hold on
+% generatePhyiscalDataPlot("a",x_sim_linear,t_sim_linear,legend_name_linear) 
 % ------
 
 %% Select Data from Linear Sim Data
