@@ -21,8 +21,8 @@ clc
 
 date = "250202";
 filename = "RawData_250202";
-step = 8;
-repeat = 2; % change segment_number below if [step,repeat] = [4,2] [7,4] [7,5] [8,4] [8,5]
+step = 1;
+repeat = 1; % change segment_number below if [step,repeat] = [4,2] [7,4] [7,5] [8,4] [8,5]
 
 load("data\data_" + date + "\Step_" + num2str(step) + "\" + ...
     filename + "_" + num2str(step) + "." + num2str (repeat) + ".mat")
@@ -86,10 +86,10 @@ for i = 1:segment_number
     T{i} = dd_t;
 end
 figure("Name","State segments")
-sgtitle("State segments",'Interpreter','latex')
+% sgtitle("State segments",'Interpreter','latex')
 for i = 1:segment_number
     subplot(4,5,i)
-    plot(T{i},X{i},'.-',MarkerSize=10)
+    plot(T{i},X{i},'.-',MarkerSize=8)
     xlabel('$t$','Interpreter','latex')
     ylabel('$x$','Interpreter','latex')
     xlim([T{i}(1),T{i}(end)])

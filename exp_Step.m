@@ -4,7 +4,7 @@ clc
 
 %%
 date = "250202";
-step = 8; % CHECK BUFORE RUN!!!!!
+step = 1; % CHECK BUFORE RUN!!!!!
 
 % load all data
 dir_path = "data\data_" + date + "\Step_" + num2str(step) + "\";
@@ -27,4 +27,4 @@ norm_Delta_Ki = norm(Delta_Ki);
 fprintf(['|K_i+1 - K^*| = ', '\n'])
 fprintf([num2str(norm_Delta_Ki), '\n'])
 
-save(dir_path + "Solution_Step_" + num2str(step) + ".mat", "Pi","Kip1")
+% save(dir_path + "Solution_Step_" + num2str(step) + ".mat", "Pi","Kip1")

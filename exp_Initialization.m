@@ -24,7 +24,7 @@ else
     load("data\data_250202\Step_" + num2str(step - 1) + ...
         "\Solution_Step_" + num2str(step - 1) + ".mat")
     P0 = Pi;
-    K = Kip1;
+    K = Kip1; % K9 = [6.6575 1.4041 16.3628 1.6145]
 end
 fprintf(['K = ', '\n'])
 fprintf([num2str(K), '\n'])
@@ -36,7 +36,8 @@ run("DataDrivenRotaryPendulum.slx")
 % select controller gain
 % K = [10 1 1 -0.1];
 % K = [10 1 10 1]; % crane stable K
-% K = [10 2.0595 26.7286 -1.8444]; % crane opt K
+% K = [10 2.0595 26.7286 -1.8444]; % crane opt K, R = 1
+% K = [1.0000 0.1395 2.9506 0.0650]; %  % crane opt K, R = 100
 % K = [-0.7071 -0.8513 -17.4339 -2.0987]; % inverted opt K
 % K = [-0.7071 -0.8513 -17.4339 -2.0987]; % inverted opt K
 
